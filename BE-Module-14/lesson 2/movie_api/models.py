@@ -1,15 +1,11 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import scoped_session, sessionmaker
+# models.py
+from flask_sqlalchemy import SQLAlchemy
 
-Base = declarative_base()
+db = SQLAlchemy()
 
-class MovieModel(Base):
+class Movie(db.Model):
     __tablename__ = 'movies'
-
-    id = Column(Integer, primary_key=True)
-    title = Column(String(255))
-    year = Column(Integer)
-
-db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False))
-Base.query = db_session.query_property()
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255))
+    director = db.Column(db.String(255))
+    year = db.Column(db.Integer)
