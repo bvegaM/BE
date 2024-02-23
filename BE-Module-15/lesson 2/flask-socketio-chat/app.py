@@ -11,6 +11,11 @@ def handle_message(message):
     messages.append(message)
     socketio.emit('message', message)
 
+@socketio.on('get_all_messages')
+def handle_get_user_messages():
+    socketio.emit('get_user_messages', messages)
+
+
 @socketio.on('connect')
 def handle_connect():
     print('Client connected')
