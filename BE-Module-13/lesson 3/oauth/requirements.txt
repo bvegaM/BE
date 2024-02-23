@@ -1,0 +1,4 @@
+Flask
+google-auth
+google-auth-oauthlib
+Werkzeug==2.2.2

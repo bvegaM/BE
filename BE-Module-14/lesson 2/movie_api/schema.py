@@ -39,5 +39,48 @@ class AddMovie(graphene.Mutation):
         db.session.commit()
         return AddMovie(movie=movie)
 
+class UpdateMovie(graphene.Mutation):
+    class Arguments:
+        id = graphene.Int(required=True)
+        title = graphene.String()
+        director = graphene.String()
+        year = graphene.Int()
+
+    movie = graphene.Field(Movie)
+
+    def mutate(self, info, id, title=None, director=None, year=None):
+        movie = MovieModel.query.filter_by(id=id).first()
+        if not movie:
+            raise Exception(f'Movie with id {id} not found')
+
+        if title:
+            movie.title = title
+        if director:
+            movie.director = director
+        if year:
+            movie.year = year
+
+        db.session.commit()
+        return UpdateMovie(movie=movie)
+    
+class DeleteMovie(graphene.Mutation):
+    class Arguments:
+        id = graphene.Int(required=True)
+
+    ok = graphene.Boolean()
+
+    def mutate(self, info, id):
+        movie = MovieModel.query.filter_by(id=id).first()
+        if not movie:
+            raise Exception(f'Movie with id {id} not found')
+
+        db.session.delete(movie)
+        db.session.commit()
+
+        return DeleteMovie(ok=True)
+
+
 class Mutation(graphene.ObjectType):
     create_movie = AddMovie.Field()
+    update_movie = UpdateMovie.Field()
+    delete_movie = DeleteMovie.Field()

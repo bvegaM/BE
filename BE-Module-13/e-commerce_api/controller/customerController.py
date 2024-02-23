@@ -2,14 +2,15 @@ from flask import jsonify, request
 from flask_jwt_extended import jwt_required
 from caching import cache
 from service.customerService import save_customer, find_all_customer, find_customer_by_id, find_all__customers_by_pagination
-from utils.util import token_required
+from utils.util import role_required, token_required
 
 def save():
     customer = request.json
     return save_customer(customer), 201
 
 @token_required
-def find_all():
+@role_required('admin')
+def find_all(token):
     return find_all_customer(), 200
 
 def find_all_by_pagination():
